@@ -1,0 +1,63 @@
+# --- Build output ---
+[Bb]in/
+[Oo]bj/
+
+# Rider / IntelliJ
+.idea/
+*.sln.DotSettings.user
+
+# VS / MSBuild
+*.user
+*.userosscache
+*.suo
+*.cache
+*.vs/
+TestResult*/
+
+# NuGet
+*.nupkg
+*.snupkg
+**/packages/*
+# but keep git metadata in case
+!**/packages/build/
+!**/packages/repositories.config
+
+# Logs
+*.log
+logs/
+
+# Database / local data
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+Data/
+
+# Config files (local, per-environment)
+**/appsettings*.json
+**/launchSettings.json
+
+# OS / misc
+.DS_Store
+Thumbs.db
+
+# Tooling
+.env
+*.env
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# Rider generated
+.idea/
+
+# Dotnet
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Others
+*.swp
+*.orig

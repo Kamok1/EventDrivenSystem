@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
@@ -50,11 +51,11 @@ public class RabbitMqBrokerClient : IEventPublisher, IEventConsumer
 
         _logger.LogInformation("[BrokerClient] Połączono z RabbitMQ pomyślnie");
 
-        var eventTypes = EventScanner.DiscoverEventTypes(_logger);
-        foreach (var eventType in eventTypes)
-        {
-            EnsureQueueExists(EventScanner.GetQueueName(eventType));
-        }
+        // var eventTypes = EventScanner.DiscoverEventTypes(_logger);
+        // foreach (var eventType in eventTypes)
+        // {
+        //     EnsureQueueExists(EventScanner.GetQueueName(eventType));
+        // }
     }
     private void EnsureQueueExists(string queueName)
     {
@@ -91,8 +92,14 @@ public class RabbitMqBrokerClient : IEventPublisher, IEventConsumer
     
     public void Subscribe<TEvent>(Action<TEvent> handler) where TEvent : BaseEvent
     {
+        
         var queueName = EventScanner.GetQueueName<TEvent>();
 
+        if (!queueName.EndsWith("Event"))
+        {
+            throw new ArgumentException("Nazwa kolejki musi się kończyć na 'Event'", nameof(queueName));
+        }
+        
         EnsureQueueExists(queueName);
 
         _logger.LogInformation("[Consumer] Rozpoczęto nasłuchiwanie na kolejce '{Queue}'", queueName);
@@ -107,10 +114,6 @@ public class RabbitMqBrokerClient : IEventPublisher, IEventConsumer
 
                 if (@event is not null)
                 {
-                    _logger.LogInformation(
-                        "[Consumer] Odebrano {EventType} (Id={EventId}) z kolejki '{Queue}'",
-                        typeof(TEvent).Name, @event.Id, queueName);
-
                     handler(@event);
                 }
 
